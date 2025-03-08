@@ -27,7 +27,7 @@ tokenizer.pad_token = tokenizer.eos_token
 #                           device_map="auto")
 
 # creating bit and bytes cofig for model quantization
-bit_and_bytes_config = BitsAndBytesConfig(
+bnb_config = BitsAndBytesConfig(
     load_in_4bit=True,  # Enable 4-bit quantization
     bnb_4bit_compute_dtype=torch.float16,  # Use fp16 for computation
     bnb_4bit_use_double_quant=True,  # Use double quantization for memory efficiency
@@ -36,7 +36,7 @@ bit_and_bytes_config = BitsAndBytesConfig(
 # Load model and tokenizer
 quantized_model = AutoModelForCausalLM.from_pretrained(
     "mistralai/Mistral-7B-Instruct-v0.1",
-    quantization_config=bit_and_bytes_config,
+    quantization_config=bnb_config,
     device_map="auto",  # Automatically assigns layers to available GPUs
 )
 
@@ -58,7 +58,7 @@ peft_config = LoraConfig(
 
 quantized_model = get_peft_model(quantized_model, peft_config)
 
-
+# set training arhuments
 training_arguments = TrainingArguments(
         output_dir="mistral-finetuned-samsum",
         per_device_train_batch_size=8,
@@ -85,4 +85,5 @@ trainer = SFTTrainer(
         tokenizer=tokenizer,
     )
 
+# Train model
 trainer.train()
