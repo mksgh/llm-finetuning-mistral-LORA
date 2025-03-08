@@ -1,0 +1,14 @@
+ipython
+accelerate 
+peft 
+bitsandbytes 
+git+https://github.com/huggingface/transformers 
+trl 
+py7zr
+optimum
+torch
+black
+bitsandbytes>0.37.0
+datasets
+#gptqmodel
+#auto-gptq 
